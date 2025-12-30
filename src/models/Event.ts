@@ -1,13 +1,17 @@
-import { User } from "./User.js";
-
 export class Event {
-  constructor(
-    public title: string,
-    public description: string,
-    public date: Date,
-    public location: string,
-    public category: string,
-    public capacity: number,
-    public participants: User[] = []   // ⚠️ tableau d'objets User
-  ) {}
+  title: string;
+  description: string;
+  date: Date;
+  location: string;
+  category: string;
+  capacity: number;
+
+  constructor(title: string, description: string, date: string | Date, location: string, category: string, capacity: number) {
+    this.title = title;
+    this.description = description;
+    this.date = (date instanceof Date) ? date : new Date(date);
+    this.location = location;
+    this.category = category;
+    this.capacity = capacity;
+  }
 }

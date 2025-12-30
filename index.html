@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <!-- En-tête -->
   <header>
     <h1>Mini Application de Gestion d'Évènements</h1>
     <nav>
@@ -14,11 +13,12 @@
       <button data-page="details">Détails</button>
       <button data-page="inscriptions">Inscriptions</button>
     </nav>
+    <button id="toggleTheme">Mode sombre</button>
+
   </header>
 
-  <!-- Contenu principal -->
   <main>
-    <!-- Page Accueil -->
+ 
     <section id="home" class="page">
       <h2>Créer un évènement</h2>
       <form id="eventForm">
@@ -52,23 +52,23 @@
       <ul id="events"></ul>
     </section>
 
-   <!-- Page Détails -->
-<section id="details" class="page">
-  <h2>Tous les évènements créés</h2>
-  <div id="details-container">
-    <p>Aucun évènement pour l’instant.</p>
-  </div>
-   <input type="text" id="searchEvent" placeholder="Rechercher un évènement...">
+    <section id="details" class="page">
+      <h2>Tous les évènements créés</h2>
+      <input type="text" id="searchEvent" placeholder="Rechercher un évènement...">
 
-  <h3>Options de tri</h3>
-  <div id="sort-controls">
-    <button id="sortByDate">Trier par date</button>
-    <button id="sortByCategory">Trier par catégorie</button>
-    <button id="sortByTitle">Trier par titre</button>
-  </div>
-</section>
+      <h3>Options de tri</h3>
+      <div id="sort-controls">
+        <button id="sortByDate">Trier par date</button>
+        <button id="sortByCategory">Trier par catégorie</button>
+        <button id="sortByTitle">Trier par titre</button>
+      </div>
 
-    <!-- Page Inscriptions -->
+      <div id="details-container">
+        <p>Aucun évènement pour l’instant.</p>
+      </div>
+    </section>
+
+ 
     <section id="inscriptions" class="page">
       <h2>S’inscrire à un évènement</h2>
       <form id="registrationForm">
@@ -89,12 +89,15 @@
     </section>
   </main>
 
-  <!-- Pied de page -->
+
+  <div id="feedback" aria-live="polite"></div>
+
+
   <footer>
     <p>&copy; 2025 - Projet TypeScript Charlène</p>
   </footer>
-   
-  <!-- Script compilé -->
+
+
   <script type="module" src="dist/main.js"></script>
 </body>
 </html>

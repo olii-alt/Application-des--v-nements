@@ -2,24 +2,26 @@ import { Event } from "./models/Event.js";
 import { User } from "./models/User.js";
 import { Registration } from "./models/Registration.js";
 
-// Données
+
 let events: Event[] = [];
 let registrations: Registration[] = [];
 
-// Éléments
+
 const eventForm = document.getElementById("eventForm") as HTMLFormElement;
 const eventsList = document.getElementById("events") as HTMLUListElement;
 const registrationForm = document.getElementById("registrationForm") as HTMLFormElement;
 const eventSelect = document.getElementById("eventSelect") as HTMLSelectElement;
 const registrationsList = document.getElementById("registrations") as HTMLUListElement;
 const detailsContainer = document.getElementById("details-container") as HTMLDivElement;
+const searchInput = document.getElementById("searchEvent") as HTMLInputElement;
+const feedbackContainer = document.getElementById("feedback") as HTMLDivElement;
 
-// Boutons tri (dans Détails)
+
 const sortByDateBtn = document.getElementById("sortByDate") as HTMLButtonElement | null;
 const sortByCategoryBtn = document.getElementById("sortByCategory") as HTMLButtonElement | null;
 const sortByTitleBtn = document.getElementById("sortByTitle") as HTMLButtonElement | null;
 
-// Navigation
+
 let currentPage: string = "home";
 
 function showPage(pageId: string) {
@@ -30,8 +32,7 @@ function showPage(pageId: string) {
   if (target) {
     target.classList.add("active");
     currentPage = pageId;
-    console.log("📄 Page affichée :", pageId);
-    if (pageId === "details") renderDetails(); // affiche tout de suite
+    if (pageId === "details") renderDetails();
   }
 }
 
@@ -42,7 +43,7 @@ document.querySelectorAll("nav button").forEach(btn => {
   });
 });
 
-// Accueil: liste simple
+
 function renderEvents() {
   eventsList.innerHTML = "";
   events.forEach(ev => {
@@ -50,21 +51,24 @@ function renderEvents() {
     li.textContent = `${ev.title} - ${ev.date.toLocaleDateString()} - ${ev.location} [${ev.category}]`;
     eventsList.appendChild(li);
   });
-  console.log("📋 Accueil: liste mise à jour:", events.map(e => e.title));
 }
 
-// Détails: affiche tous les évènements
-function renderDetails() {
-  detailsContainer.innerHTML = "";
 
-  if (events.length === 0) {
-    detailsContainer.innerHTML = "<p>Aucun évènement créé.</p>";
-    
+function renderDetails(filteredEvents?: Event[]) {
+  detailsContainer.innerHTML = "";
+  const listToRender = filteredEvents ?? events;
+
+  const counter = document.createElement("p");
+  counter.textContent = `${listToRender.length} évènement(s) trouvé(s)`;
+  detailsContainer.appendChild(counter);
+
+  if (listToRender.length === 0) {
+    detailsContainer.innerHTML += "<p>Aucun évènement trouvé.</p>";
     return;
   }
 
   const ul = document.createElement("ul");
-  events.forEach(ev => {
+  listToRender.forEach(ev => {
     const li = document.createElement("li");
     li.innerHTML = `
       <h3>${ev.title}</h3>
@@ -76,12 +80,9 @@ function renderDetails() {
     `;
     ul.appendChild(li);
   });
-
   detailsContainer.appendChild(ul);
-  console.log("📋 Détails: évènements affichés:", events.map(e => e.title));
 }
 
-// Select des évènements (Inscriptions)
 function updateEventSelect() {
   eventSelect.innerHTML = "";
   events.forEach((ev, index) => {
@@ -90,10 +91,9 @@ function updateEventSelect() {
     option.textContent = ev.title;
     eventSelect.appendChild(option);
   });
-  console.log("🔄 Select évènements mis à jour:", events.map(e => e.title));
 }
 
-// Inscriptions: liste
+
 function renderRegistrations() {
   registrationsList.innerHTML = "";
   registrations.forEach(reg => {
@@ -101,13 +101,21 @@ function renderRegistrations() {
     li.textContent = `${reg.user.name} (${reg.user.email}) inscrit à ${reg.event.title}`;
     registrationsList.appendChild(li);
   });
-  console.log("📋 Inscriptions:", registrations.length);
 }
 
-// Création évènement
+
+function showFeedback(message: string, type: "success" | "error") {
+  feedbackContainer.innerHTML = "";
+  const msg = document.createElement("div");
+  msg.textContent = message;
+  msg.className = type;
+  feedbackContainer.appendChild(msg);
+  setTimeout(() => msg.remove(), 3000);
+}
+
+
 eventForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
   const title = (document.getElementById("title") as HTMLInputElement).value.trim();
   const description = (document.getElementById("description") as HTMLTextAreaElement).value.trim();
   const dateValue = (document.getElementById("date") as HTMLInputElement).value;
@@ -119,20 +127,13 @@ eventForm.addEventListener("submit", (e) => {
   const newEvent = new Event(title, description, date, location, category, capacity);
 
   events.push(newEvent);
-  console.log("📌 Nouvel évènement:", newEvent);
-
   renderEvents();
   updateEventSelect();
-
-  // Si on est sur Détails, rafraîchir immédiatement
-  if (currentPage === "details") {
-    renderDetails();
-  }
-
+  if (currentPage === "details") renderDetails();
   eventForm.reset();
 });
 
-// Inscription
+
 registrationForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -143,49 +144,78 @@ registrationForm.addEventListener("submit", (e) => {
   const user = new User(name, email);
   const event = events[eventIndex];
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const eventDate = new Date(event.date);
+  eventDate.setHours(0, 0, 0, 0);
+
+  if (eventDate < today) {
+    showFeedback(" Impossible de s'inscrire : l'évènement est déjà passé.", "error");
+    return;
+  }
+
+ 
+  if (event.capacity <= 0) {
+    showFeedback(" Capacité atteinte pour cet évènement.", "error");
+    return;
+  }
+
+  
+  const alreadyRegistered = registrations.some(
+    reg => reg.event === event && reg.user.email.toLowerCase() === email.toLowerCase()
+  );
+  if (alreadyRegistered) {
+    showFeedback(" Vous êtes déjà inscrit à cet évènement.", "error");
+    return;
+  }
+
+  
   const newRegistration = new Registration(user, event);
   registrations.push(newRegistration);
 
-  console.log("✅ Nouvelle inscription:", newRegistration);
+  
+  event.capacity = event.capacity - 1;
 
   renderRegistrations();
+  if (currentPage === "details") renderDetails();
   registrationForm.reset();
+  showFeedback(" Inscription réussie !", "success");
 });
 
-// Tri (boutons dans Détails)
+
 sortByDateBtn?.addEventListener("click", () => {
   events.sort((a, b) => a.date.getTime() - b.date.getTime());
-  console.log("🔎 Tri par date appliqué");
   renderDetails();
 });
-
 sortByCategoryBtn?.addEventListener("click", () => {
   events.sort((a, b) => a.category.localeCompare(b.category));
-  console.log("🔎 Tri par catégorie appliqué");
+  renderDetails();
+});
+sortByTitleBtn?.addEventListener("click", () => {
+  events.sort((a, b) => a.title.localeCompare(b.title));
   renderDetails();
 });
 
-sortByTitleBtn?.addEventListener("click", () => {
-  events.sort((a, b) => a.title.localeCompare(b.title));
-  console.log("🔎 Tri par titre appliqué");
-  renderDetails();
-});
-const searchInput = document.getElementById("searchEvent") as HTMLInputElement;
 
 searchInput.addEventListener("input", () => {
   const query = searchInput.value.toLowerCase();
   const filtered = events.filter(ev =>
     ev.title.toLowerCase().includes(query) ||
-    ev.location.toLowerCase().includes(query)
+    ev.location.toLowerCase().includes(query) ||
+    ev.category.toLowerCase().includes(query)
   );
-  // Fonction sans paramètre
- // ✔ pas d’argument
- // Fonction avec paramètre
- // ✔ un argument
-
-
+  renderDetails(filtered);
 });
 
-// Page par défaut
+const toggleThemeBtn = document.getElementById("toggleTheme") as HTMLButtonElement;
+toggleThemeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  toggleThemeBtn.textContent = document.body.classList.contains("dark")
+    ? " Mode clair"
+    : " Mode sombre";
+});
+
+
+
 showPage("home");
-console.log("✅ Script chargé et prêt !");
+console.log(" Script chargé et prêt !");
