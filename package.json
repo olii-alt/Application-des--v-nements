@@ -1,0 +1,17 @@
+{
+  "name": "event-app",
+  "version": "1.0.0",
+  "description": "Mini application web de gestion d'évènements en TypeScript",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "lite-server"
+  },
+  "author": "Charlène",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "typescript": "^5.0.0",
+    "undici-types": "^7.16.0"
+  }
+}

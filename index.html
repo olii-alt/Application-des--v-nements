@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Application de Gestion d'Évènements</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- En-tête -->
+  <header>
+    <h1>Mini Application de Gestion d'Évènements</h1>
+    <nav>
+      <button data-page="home">Accueil</button>
+      <button data-page="details">Détails</button>
+      <button data-page="inscriptions">Inscriptions</button>
+    </nav>
+  </header>
+
+  <!-- Contenu principal -->
+  <main>
+    <!-- Page Accueil -->
+    <section id="home" class="page">
+      <h2>Créer un évènement</h2>
+      <form id="eventForm">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" required>
+
+        <label for="description">Description :</label>
+        <textarea id="description" required></textarea>
+
+        <label for="date">Date :</label>
+        <input type="date" id="date" required>
+
+        <label for="location">Lieu :</label>
+        <input type="text" id="location" required>
+
+        <label for="category">Catégorie :</label>
+        <select id="category" required>
+          <option value="conférence">Conférence</option>
+          <option value="sport">Sport</option>
+          <option value="atelier">Atelier</option>
+          <option value="autre">Autre</option>
+        </select>
+
+        <label for="capacity">Capacité :</label>
+        <input type="number" id="capacity" min="1" required>
+
+        <button type="submit">Ajouter</button>
+      </form>
+
+      <h2>Liste des évènements</h2>
+      <ul id="events"></ul>
+    </section>
+
+   <!-- Page Détails -->
+<section id="details" class="page">
+  <h2>Tous les évènements créés</h2>
+  <div id="details-container">
+    <p>Aucun évènement pour l’instant.</p>
+  </div>
+   <input type="text" id="searchEvent" placeholder="Rechercher un évènement...">
+
+  <h3>Options de tri</h3>
+  <div id="sort-controls">
+    <button id="sortByDate">Trier par date</button>
+    <button id="sortByCategory">Trier par catégorie</button>
+    <button id="sortByTitle">Trier par titre</button>
+  </div>
+</section>
+
+    <!-- Page Inscriptions -->
+    <section id="inscriptions" class="page">
+      <h2>S’inscrire à un évènement</h2>
+      <form id="registrationForm">
+        <label for="userName">Nom :</label>
+        <input type="text" id="userName" required>
+
+        <label for="userEmail">Email :</label>
+        <input type="email" id="userEmail" required>
+
+        <label for="eventSelect">Choisir un évènement :</label>
+        <select id="eventSelect" required></select>
+
+        <button type="submit">S’inscrire</button>
+      </form>
+
+      <h2>Liste des inscriptions</h2>
+      <ul id="registrations"></ul>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer>
+    <p>&copy; 2025 - Projet TypeScript Charlène</p>
+  </footer>
+   
+  <!-- Script compilé -->
+  <script type="module" src="dist/main.js"></script>
+</body>
+</html>
