@@ -75,12 +75,21 @@ Ajoute des images montrant :
 - Page d’accueil avec liste d’évènements
 ---
 !
+ICI ON EST EN MODE CLAIR 
 ![alt text](image-1.png)
-- Page Détails.  
+Pour créer un evenement on doit entrer les differentes informations de l’evenement dans les cadres correspondants c’est-à-dire titre, descrription de l’evenement, la date, le lieu, categorie, capacite .Puis on clique sur ajouter et un nouvel evenement est créer et s’affiche dans la listes des evenements
+- Page Détails.
+Pour voir les details de l’evenement on a 2 possibilitees soit on clique sur l’evenement et ca nous renvoi sur la page details soit on par directement dans la page details et la on verra tous les evenements on peut ainsi faire une recherche et trier les evenement selon les criteres disponibles  
 ![alt text](image-2.png)
 - Formulaire d’inscription. 
+Pour s’inscrire a un evenement on part dans la page inscriptions on remplie tous les champs vide et l’inscription est effectuee
  ![alt text](image-3.png)
+ Si la date de l’evenement est passe l’application signale que la date est passe et bloque l’inscription
+ ![alt text](image-6.png)
+ Sinon l’inscription s’effectue normalement
+ Au cas ou le nombre de place disposniple est fini l’application bloque l’inscription
 - (Bonus) Vue mobile / mode sombre.
+ICI ON QUITTE DU MODE CLAIR AU MODE SOMBRE
 [alt text](image.png)
 -![alt text](image-4.png)
 
