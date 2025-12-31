@@ -72,10 +72,15 @@ Explique comment utiliser ton app :
 
 ### 6. **Captures d’écran**
 Ajoute des images montrant :
-- Page d’accueil avec liste d’évènements.  
-- Page Détails.  
-- Formulaire d’inscription.  
-- (Bonus) Vue mobile / mode sombre.
-
+- Page d’accueil avec liste d’évènements
 ---
+!
+![alt text](image-1.png)
+- Page Détails.  
+![alt text](image-2.png)
+- Formulaire d’inscription. 
+ ![alt text](image-3.png)
+- (Bonus) Vue mobile / mode sombre.
+[alt text](image.png)
+-![alt text](image-4.png)
 
